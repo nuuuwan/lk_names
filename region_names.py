@@ -16,8 +16,10 @@ def main():
     
     c_to_names = {}
     for name in names:
+        name = name.upper()        
         # name = name.replace('-', '')
         # name = name.upper().split(' ')[0]
+        
         c = name[0]
         if c not in c_to_names:
             c_to_names[c] = []
@@ -29,8 +31,8 @@ def main():
             print(f'{c}\t-')
             continue
         
-        # names_for_c = sorted(names_for_c, key=lambda name: count_chars(name, c), reverse=True)
-        names_for_c = sorted(names_for_c, key=lambda name: str(len(name) + 10_000) + name)
+        names_for_c = sorted(names_for_c, key=lambda name: count_chars(name, c) * 10000 - len(name), reverse=True)
+        # names_for_c = sorted(names_for_c, key=lambda name: str(len(name) + 10_000) + name)
         selected_name = names_for_c[0].title()
         print(f'{c}\t{selected_name}')
         
