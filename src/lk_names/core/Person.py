@@ -5,6 +5,7 @@ from utils import JSONFile
 
 @dataclass
 class Person:
+    lg_id: str
     district_id: str
     name: str
 
@@ -30,6 +31,7 @@ class Person:
     @staticmethod
     def from_dict(d):
         return Person(
+            d['lg_id'],
             d['district_id'],
             d['name'],
         )
@@ -38,3 +40,13 @@ class Person:
     def list_all():
         d_list = JSONFile('data/lgelecsl_2023/candidates.json').read()
         return [Person.from_dict(d) for d in d_list]
+
+    @staticmethod
+    def region_to_count():
+        region_to_count = {}
+        for p in Person.list_all():
+            region_to_count[p.district_id] = (
+                region_to_count.get(p.district_id, 0) + 1
+            )
+            region_to_count[p.lg_id] = region_to_count.get(p.lg_id, 0) + 1
+        return region_to_count

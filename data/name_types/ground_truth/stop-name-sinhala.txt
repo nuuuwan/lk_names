@@ -1,9 +1,13 @@
-        banda
-        bandara
-        don
-        gedara
-        vidana
-        walawwe
-        hewa
-        kumara
-        kumari
+banda
+bandara
+don
+gedara
+vidana
+walawwe
+hewa
+kumara
+kumari
+dona
+pahala
+wasala
+waththe

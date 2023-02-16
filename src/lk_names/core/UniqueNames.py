@@ -5,12 +5,11 @@ from gig import Ent, EntType
 
 class UniqueNames:
     @staticmethod
-    def name_to_count(region_id='LK'):
+    def name_to_count(region_id):
         def nocache():
             name_to_count = {}
             for person in Person.list_all():
-                district_id = person.district_id
-                if region_id not in district_id:
+                if region_id[3:] not in person.lg_id:
                     continue
                 for name in person.names:
                     if name not in name_to_count:

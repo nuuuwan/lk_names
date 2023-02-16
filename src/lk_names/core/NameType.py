@@ -1,39 +1,49 @@
-from lk_names.core.NAME_TO_TYPE import NAME_TO_TYPE, TYPE_TO_NAMES
-from lk_names.core.UniqueNames import UniqueNames
 from lk_names import FiledVariable
-from gig import Ent, EntType
+from utils import Directory
 
 NAME_TYPE_UNKNOWN = 'unknown'
 
 
 class NameType:
     @staticmethod
+    def get_type_to_names():
+        def nocache():
+            type_to_names = {}
+            for file in Directory('data/name_types/ground_truth').children:
+                type_to_names[file.name[:-4]] = [
+                    line.strip() for line in file.read_lines() if line.strip()
+                ]
+            return type_to_names
+
+        return FiledVariable(
+            'data/name_types/type_to_names.json', nocache
+        ).get(force=False)
+
+    @staticmethod
+    def get_name_to_type():
+        def nocache():
+            type_to_names = NameType.get_type_to_names()
+            name_to_type = {}
+            for type, names in type_to_names.items():
+                for name in names:
+                    name_to_type[name] = type
+            return name_to_type
+
+        return FiledVariable(
+            'data/name_types/name_to_type.json', nocache
+        ).get(force=False)
+
+    @staticmethod
     def get(name):
-        return NAME_TO_TYPE.get(name, NAME_TYPE_UNKNOWN)
+        name_to_type = NameType.get_name_to_type()
+        return name_to_type.get(name, NAME_TYPE_UNKNOWN)
 
     @staticmethod
     def list_all():
-        return list(sorted(TYPE_TO_NAMES.keys())) + [NAME_TYPE_UNKNOWN]
-
-    @staticmethod
-    def unknown_names():
-        def nocache():
-            unknown_set = set()
-            for district_ent in Ent.list_from_type(EntType.DISTRICT):
-                district_id = district_ent.id
-                name_to_count_original = UniqueNames.name_to_count(
-                    district_id
-                )
-                for name, count in list(name_to_count_original.items())[:10]:
-                    name_type = NameType.get(name)
-                    if name_type == NAME_TYPE_UNKNOWN:
-                        unknown_set.add(name)
-            return list(sorted(unknown_set))
-
-        return FiledVariable('data/unknown_names.json', nocache).get(
-            force=True
-        )
+        type_to_names = NameType.get_type_to_names()
+        return list(sorted(type_to_names.keys())) + [NAME_TYPE_UNKNOWN]
 
 
 if __name__ == '__main__':
-    NameType.unknown_names()
+    NameType.get_type_to_names()
+    NameType.get_name_to_type()
