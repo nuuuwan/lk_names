@@ -125,7 +125,7 @@ class NormalizedNames:
             return cluster_idx
 
         return FiledVariable(
-            f'data/similr_cluster_idx-{similarity_limit:.02f}.json', nocache
+            f'data/similar_cluster_idx-{similarity_limit:.02f}.json', nocache
         ).get()
 
     @staticmethod

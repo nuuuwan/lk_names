@@ -38,3 +38,6 @@ class Person:
     def list_all():
         d_list = JSONFile('data/lgelecsl_2023/candidates.json').read()
         return [Person.from_dict(d) for d in d_list]
+
+        
+

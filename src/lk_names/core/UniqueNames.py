@@ -1,13 +1,16 @@
 from lk_names import FiledVariable
 from lk_names.core.Person import Person
-
+from gig import Ent, EntType
 
 class UniqueNames:
     @staticmethod
-    def name_to_count():
+    def name_to_count(region_id='LK'):
         def nocache():
             name_to_count = {}
             for person in Person.list_all():
+                district_id = person.district_id
+                if region_id not in district_id:
+                    continue
                 for name in person.names:
                     if name not in name_to_count:
                         name_to_count[name] = 0
@@ -21,7 +24,7 @@ class UniqueNames:
 
             return name_to_count
 
-        return FiledVariable('data/name_to_count.json', nocache).get()
+        return FiledVariable(f'data/name_to_count/{region_id}.json', nocache).get()
 
     @staticmethod
     def list_all():
@@ -44,4 +47,10 @@ class UniqueNames:
 if __name__ == '__main__':
     UniqueNames.name_to_count()
     UniqueNames.list_all()
-    UniqueNames.idx()
+    UniqueNames.idx()   
+
+    for ent_type in [EntType.DISTRICT]:
+        ent_list = Ent.list_from_type(ent_type)
+        for ent in ent_list:
+            region_id = ent.id
+            UniqueNames.name_to_count(region_id)
