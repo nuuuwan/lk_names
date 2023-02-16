@@ -1,6 +1,7 @@
 from lk_names.core.UniqueNames import UniqueNames
 from fuzzywuzzy import fuzz
 from lk_names import FiledVariable
+from lk_names.core.NAME_TO_TYPE import TYPE_TO_NAMES
 from utils import Log
 import time
 
@@ -54,7 +55,7 @@ class NormalizedNames:
             log.debug(f'Stored {n_pairs_in_matrix:,}/{n_pairs:,} pairs')
             return matrix
 
-        return FiledVariable('data/similarity_matrix.json', nocache).get()
+        return FiledVariable('data/similarity_matrix/complete.json', nocache).get()
 
     def similarity_matrix_pruned(similarity_limit):
         def nocache():
@@ -70,11 +71,11 @@ class NormalizedNames:
             return matrix_pruned
 
         return FiledVariable(
-            f'data/similarity_matrix-{similarity_limit:.2f}.json', nocache
+            f'data/similarity_matrix/{similarity_limit:.2f}.json', nocache
         ).get()
 
     @staticmethod
-    def similar_clusters(similarity_limit):
+    def similar_cluster_list_all(similarity_limit):
         def nocache():
             name_to_count = UniqueNames.name_to_count()
             idx = UniqueNames.idx()
@@ -111,7 +112,7 @@ class NormalizedNames:
             return clusters
 
         return FiledVariable(
-            f'data/similar_clusters-{similarity_limit:.02f}.json', nocache
+            f'data/similar_cluster/list_all-{similarity_limit:.02f}.json', nocache
         ).get()
 
     def similar_cluster_idx(similarity_limit):
@@ -125,24 +126,7 @@ class NormalizedNames:
             return cluster_idx
 
         return FiledVariable(
-            f'data/similar_cluster_idx-{similarity_limit:.02f}.json', nocache
-        ).get()
-
-    @staticmethod
-    def name_to_count_for_type(similarity_limit, name_type):
-        def nocache():
-            name_to_count = NormalizedNames.similar_cluster_idx(
-                similarity_limit
-            )
-            name_to_count_for_type = {}
-            for name, count in name_to_count:
-                if name in TYPE_TO_NAME[name_type]:
-                    name_to_count_for_type[name] = count
-            return name_to_count_for_type
-
-        return FiledVariable(
-            f'data/name_to_count_for_type-{similarity_limit:.02f}-{name_type}.json',
-            nocache,
+            f'data/similar_cluster/idx-{similarity_limit:.02f}.json', nocache
         ).get()
 
 
@@ -151,6 +135,6 @@ if __name__ == '__main__':
     NormalizedNames.similarity_matrix_pruned(0.8)
     NormalizedNames.similarity_matrix_pruned(0.9)
     NormalizedNames.similarity_matrix_pruned(0.95)
-    NormalizedNames.similar_clusters(0.9)
+    NormalizedNames.similar_cluster_list_all(0.9)
     NormalizedNames.similar_cluster_idx(0.9)
-    NormalizedNames.name_to_count_for_type(0.85, 'stop')
+

@@ -15,8 +15,9 @@ class FiledVariable:
         if file.exists and not force:
             return file.read()
 
+        log.debug(f'Building {self.path}...')
         value = self.func_get()
         file.write(value)
         file_size = os.path.getsize(self.path)
-        log.debug(f'Wrote {self.path} ({file_size:,}B)')
+        log.info(f'Wrote {self.path} ({file_size:,}B)')
         return value

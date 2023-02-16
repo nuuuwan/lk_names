@@ -32,14 +32,14 @@ class UniqueNames:
             name_to_count = UniqueNames.name_to_count()
             return sorted(name_to_count.keys())
 
-        return FiledVariable('data/unique_names.json', nocache).get()
+        return FiledVariable('data/unique_names/list_all.json', nocache).get()
 
     @staticmethod
     def idx():
         def nocache():
             return {name: i for i, name in enumerate(UniqueNames.list_all())}
 
-        return FiledVariable('data/unique_names.idx.json', nocache).get(
+        return FiledVariable('data/unique_names/idx.json', nocache).get(
             force=True
         )
 
