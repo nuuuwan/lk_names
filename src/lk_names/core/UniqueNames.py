@@ -49,7 +49,7 @@ if __name__ == '__main__':
     UniqueNames.list_all()
     UniqueNames.idx()   
 
-    for ent_type in [EntType.DISTRICT]:
+    for ent_type in [EntType.DISTRICT, 'LK']:
         ent_list = Ent.list_from_type(ent_type)
         for ent in ent_list:
             region_id = ent.id
