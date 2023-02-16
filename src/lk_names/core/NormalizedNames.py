@@ -47,7 +47,8 @@ class NormalizedNames:
 
                     log.debug(
                         f'{p_pairs:.1%} ({dt:.0f}s/{t_total:.0f}s)'
-                        + f'\t{n_pairs_in_matrix:,}'+f' "{name_i}" x "{name_j}" = {similarity:.0%}'
+                        + f'\t{n_pairs_in_matrix:,}'
+                        + f' "{name_i}" x "{name_j}" = {similarity:.0%}'
                     )
 
             log.debug(f'Stored {n_pairs_in_matrix:,}/{n_pairs:,} pairs')
@@ -67,9 +68,10 @@ class NormalizedNames:
                         matrix_pruned[i] = {}
                     matrix_pruned[i][j] = matrix[i][j]
             return matrix_pruned
-        return FiledVariable(f'data/similarity_matrix-{similarity_limit:.2f}.json', nocache).get(
-            force=True
-        )
+
+        return FiledVariable(
+            f'data/similarity_matrix-{similarity_limit:.2f}.json', nocache
+        ).get(force=True)
 
 
 if __name__ == '__main__':
