@@ -2,6 +2,7 @@ from lk_names import FiledVariable
 from lk_names.core.Person import Person
 from gig import Ent, EntType
 
+
 class UniqueNames:
     @staticmethod
     def name_to_count(region_id='LK'):
@@ -24,7 +25,9 @@ class UniqueNames:
 
             return name_to_count
 
-        return FiledVariable(f'data/name_to_count/{region_id}.json', nocache).get()
+        return FiledVariable(
+            f'data/name_to_count/{region_id}.json', nocache
+        ).get()
 
     @staticmethod
     def list_all():
@@ -47,7 +50,7 @@ class UniqueNames:
 if __name__ == '__main__':
     UniqueNames.name_to_count()
     UniqueNames.list_all()
-    UniqueNames.idx()   
+    UniqueNames.idx()
 
     for ent_type in [EntType.DISTRICT, 'LK']:
         ent_list = Ent.list_from_type(ent_type)

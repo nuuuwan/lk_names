@@ -1,7 +1,6 @@
 from lk_names.core.UniqueNames import UniqueNames
 from fuzzywuzzy import fuzz
 from lk_names import FiledVariable
-from lk_names.core.NAME_TO_TYPE import TYPE_TO_NAMES
 from utils import Log
 import time
 
@@ -55,7 +54,9 @@ class NormalizedNames:
             log.debug(f'Stored {n_pairs_in_matrix:,}/{n_pairs:,} pairs')
             return matrix
 
-        return FiledVariable('data/similarity_matrix/complete.json', nocache).get()
+        return FiledVariable(
+            'data/similarity_matrix/complete.json', nocache
+        ).get()
 
     def similarity_matrix_pruned(similarity_limit):
         def nocache():
@@ -112,7 +113,8 @@ class NormalizedNames:
             return clusters
 
         return FiledVariable(
-            f'data/similar_cluster/list_all-{similarity_limit:.02f}.json', nocache
+            f'data/similar_cluster/list_all-{similarity_limit:.02f}.json',
+            nocache,
         ).get()
 
     def similar_cluster_idx(similarity_limit):
@@ -137,4 +139,3 @@ if __name__ == '__main__':
     NormalizedNames.similarity_matrix_pruned(0.95)
     NormalizedNames.similar_cluster_list_all(0.9)
     NormalizedNames.similar_cluster_idx(0.9)
-
