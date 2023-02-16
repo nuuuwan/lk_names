@@ -71,9 +71,11 @@ class NormalizedNames:
 
         return FiledVariable(
             f'data/similarity_matrix-{similarity_limit:.2f}.json', nocache
-        ).get(force=True)
+        ).get()
 
 
 if __name__ == '__main__':
     NormalizedNames.similarity_matrix()
+    NormalizedNames.similarity_matrix_pruned(0.8)
     NormalizedNames.similarity_matrix_pruned(0.9)
+    NormalizedNames.similarity_matrix_pruned(0.95)
