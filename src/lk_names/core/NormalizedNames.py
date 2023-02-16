@@ -73,9 +73,84 @@ class NormalizedNames:
             f'data/similarity_matrix-{similarity_limit:.2f}.json', nocache
         ).get()
 
+    @staticmethod
+    def similar_clusters(similarity_limit):
+        def nocache():
+            name_to_count = UniqueNames.name_to_count()
+            idx = UniqueNames.idx()
+            similarity_matrix = NormalizedNames.similarity_matrix_pruned(
+                similarity_limit
+            )
+
+            def is_similar_enough(i, j):
+                i = str(i)
+                j = str(j)
+                if i in similarity_matrix and j in similarity_matrix[i]:
+                    return True
+                if j in similarity_matrix and i in similarity_matrix[j]:
+                    return True
+                return False
+
+            clusters = {}
+            n = len(name_to_count)
+            i_visited = 0
+            for name in name_to_count.keys():
+                i = idx[name]
+                i_visited += 1
+                found_existing_cluster = False
+                for j in clusters:
+                    if is_similar_enough(i, j):
+                        clusters[j].append(i)
+
+                        print(f'\t\t{i_visited}/{n} {i} -> {j}', end='\r')
+                        found_existing_cluster = True
+                        break
+                if not found_existing_cluster:
+                    clusters[i] = []
+
+            return clusters
+
+        return FiledVariable(
+            f'data/similar_clusters-{similarity_limit:.02f}.json', nocache
+        ).get()
+
+    def similar_cluster_idx(similarity_limit):
+        def nocache():
+            clusters = NormalizedNames.similar_clusters(similarity_limit)
+            cluster_idx = {}
+            for i in clusters:
+                cluster_idx[i] = i
+                for j in clusters[i]:
+                    cluster_idx[j] = i
+            return cluster_idx
+
+        return FiledVariable(
+            f'data/similr_cluster_idx-{similarity_limit:.02f}.json', nocache
+        ).get()
+
+    @staticmethod
+    def name_to_count_for_type(similarity_limit, name_type):
+        def nocache():
+            name_to_count = NormalizedNames.similar_cluster_idx(
+                similarity_limit
+            )
+            name_to_count_for_type = {}
+            for name, count in name_to_count:
+                if name in TYPE_TO_NAME[name_type]:
+                    name_to_count_for_type[name] = count
+            return name_to_count_for_type
+
+        return FiledVariable(
+            f'data/name_to_count_for_type-{similarity_limit:.02f}-{name_type}.json',
+            nocache,
+        ).get()
+
 
 if __name__ == '__main__':
     NormalizedNames.similarity_matrix()
     NormalizedNames.similarity_matrix_pruned(0.8)
     NormalizedNames.similarity_matrix_pruned(0.9)
     NormalizedNames.similarity_matrix_pruned(0.95)
+    NormalizedNames.similar_clusters(0.9)
+    NormalizedNames.similar_cluster_idx(0.9)
+    NormalizedNames.name_to_count_for_type(0.85, 'stop')
