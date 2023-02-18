@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 
 from utils import JSONFile
+from lk_names import FiledVariable
 
 
 @dataclass
@@ -43,10 +44,17 @@ class Person:
 
     @staticmethod
     def region_to_count():
-        region_to_count = {}
-        for p in Person.list_all():
-            region_to_count[p.district_id] = (
-                region_to_count.get(p.district_id, 0) + 1
-            )
-            region_to_count[p.lg_id] = region_to_count.get(p.lg_id, 0) + 1
-        return region_to_count
+        def nocache():
+            region_to_count = {}
+            for p in Person.list_all():
+                region_to_count[p.district_id] = (
+                    region_to_count.get(p.district_id, 0) + 1
+                )
+                region_to_count[p.lg_id] = region_to_count.get(p.lg_id, 0) + 1
+            return region_to_count
+
+        return FiledVariable('data/region_to_count.json', nocache).get()
+
+
+if __name__ == '__main__':
+    Person.region_to_count()

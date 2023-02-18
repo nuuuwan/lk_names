@@ -38,17 +38,17 @@ NAME_TO_COLOR = {}
 
 
 def get_color_for_p(p, max_p):
-    if p == 0 :
+    if p == 0:
         return 'white'
     base = math.log2(max_p)
     log_p = math.log2(p)
-    if log_p > base-1:
+    if log_p > base - 1:
         return ((0.5, 0.0, 0.0, alpha),)
-    if log_p > base-2:
+    if log_p > base - 2:
         return (1, 0.5, 0.0, alpha)
-    if log_p > base-3:
+    if log_p > base - 3:
         return (1, 1, 0.0, alpha)
-    if log_p > base-4:
+    if log_p > base - 4:
         return (0, 0.5, 0.0, alpha)
     return (0, 0.5, 1.0, alpha)
 
@@ -187,8 +187,7 @@ class MostCommon:
                 p_name = None
 
             region_to_p[region_id] = p_name
-            
-        
+
         for ent in ent_list:
             region_id = ent.id
             p = region_to_p[region_id]
@@ -230,10 +229,9 @@ if __name__ == '__main__':
     for name_type in NameType.list_all():
         MostCommon.draw_map_for_name_from_type(name_type, SIMILARITY_LIMIT)
 
-        name_to_count_from_type = MostCommon.name_to_count_from_type('', name_type, SIMILARITY_LIMIT)
+        name_to_count_from_type = MostCommon.name_to_count_from_type(
+            '', name_type, SIMILARITY_LIMIT
+        )
 
         for name, count in list(name_to_count_from_type.items())[:4]:
             MostCommon.draw_map_for_name(name, SIMILARITY_LIMIT)
-
-    
-    

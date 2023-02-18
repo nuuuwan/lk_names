@@ -32,5 +32,4 @@ class NameTypeAndMostCommon:
 
 
 if __name__ == '__main__':
-
     NameTypeAndMostCommon.unknown_names()
