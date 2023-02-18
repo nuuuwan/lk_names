@@ -232,7 +232,7 @@ if __name__ == '__main__':
 
         name_to_count_from_type = MostCommon.name_to_count_from_type('', name_type, SIMILARITY_LIMIT)
 
-        for name, count in list(name_to_count_from_type.items())[:3]:
+        for name, count in list(name_to_count_from_type.items())[:4]:
             MostCommon.draw_map_for_name(name, SIMILARITY_LIMIT)
 
     

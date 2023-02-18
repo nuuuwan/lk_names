@@ -19,7 +19,7 @@ class NameTypeAndMostCommon:
                 name_to_count_original = MostCommon.name_to_count(
                     district_id, SIMILARITY_LIMIT
                 )
-                for name, count in list(name_to_count_original.items())[:40]:
+                for name, count in list(name_to_count_original.items())[:50]:
                     name_type = NameType.get(name)
                     if name_type == NAME_TYPE_UNKNOWN:
                         unknown_set.add(name)
